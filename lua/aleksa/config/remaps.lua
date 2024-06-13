@@ -55,6 +55,9 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 --   silent = true,
 -- })
 
+--adittional saving remap, as I often make this mistake
+vim.keymap.set("c", "W", "w")
+
 --indenting
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
@@ -72,3 +75,5 @@ vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, {
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, {
   desc = "Open diagnostic [Q]uickfix list",
 })
+
+vim.keymap.set("n", "<leader>af", "a()=>{}<Esc>F(a")

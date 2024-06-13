@@ -5,7 +5,6 @@ vim.g.maplocalleader = " "
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
---vim.opt.mouse = ""
 -- vim.opt.guicursor = vim.opt.guicursor + "a:blinkon400"
 vim.opt.guicursor = "a:blinkon400"
 

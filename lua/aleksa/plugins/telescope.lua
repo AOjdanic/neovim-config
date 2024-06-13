@@ -67,7 +67,7 @@ return {
       desc = "Search colorschemes",
     })
 
-    vim.keymap.set("n", "<leader>sgf", builtin.git_files, { desc = "[S]earch [G]it [F]iles" })
+    vim.keymap.set("n", "<leader>si", builtin.git_files, { desc = "[S]earch [G]it [F]iles" })
     vim.keymap.set("n", "<leader>sb", builtin.git_branches, { desc = "Search [Git] [B]ranches" })
 
     vim.keymap.set("n", "<leader>/", function()
