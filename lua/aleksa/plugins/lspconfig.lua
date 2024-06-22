@@ -1,4 +1,3 @@
--- return {}
 return {
   {
     "neovim/nvim-lspconfig",
@@ -36,6 +35,14 @@ return {
           vim.keymap.set("n", "<leader>]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
 
           vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+
+          if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+            vim.keymap.set("n", "<leader>ih", function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+            end)
+          end
         end,
       })
 
@@ -45,71 +52,35 @@ return {
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
       end
 
-      lspconfig.lua_ls.setup({
-        capabilities = capabilities,
-      })
-
-      lspconfig.cssls.setup({
-        capabilities = capabilities,
-      })
-
-      lspconfig.rust_analyzer.setup({
-        capabilities = capabilities,
-      })
-
-      lspconfig.gopls.setup({
-        capabilities = capabilities,
-      })
-
-      --tailwind
-      lspconfig.tailwindcss.setup({
-        capabilities = capabilities,
-      })
-
-      --emmet_ls
-      lspconfig.emmet_language_server.setup({
-        capabilities = capabilities,
-      })
-
-      -- json
-      lspconfig.jsonls.setup({
-        capabilities = capabilities,
-      })
-
-      lspconfig.tsserver.setup({
-        capabilities = capabilities,
-      })
-
-      lspconfig.vuels.setup({
-        capabilities = capabilities,
-        filetypes = {
-          "vue",
-        },
-      })
-
-      lspconfig.volar.setup({
-        capabilities = capabilities,
-        filetypes = {
-          "vue",
-        },
-      })
-
-      -- bash
-      lspconfig.bashls.setup({
-        capabilities = capabilities,
-      })
-
-      lspconfig.eslint.setup({
-        capabilities = capabilities,
-        settings = {
-          eslint = {
-            autoFixOnSave = true,
-            format = {
-              enable = true,
+      local servers = {
+        lua_ls = {},
+        cssls = {},
+        rust_analyzer = {},
+        gopls = {},
+        tailwindcss = {},
+        emmet_language_server = {},
+        jsonls = {},
+        tsserver = {},
+        vuels = {},
+        volar = {},
+        bashls = {},
+        eslint = {
+          settings = {
+            eslint = {
+              autoFixOnSave = true,
+              format = {
+                enable = true,
+              },
             },
           },
         },
-      })
+      }
+
+      for server_name, config in pairs(servers) do
+        config.capabilities = vim.tbl_deep_extend("force", capabilities, config.capabilities or {})
+
+        lspconfig[server_name].setup(config)
+      end
     end,
   },
 
