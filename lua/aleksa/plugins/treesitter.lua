@@ -34,11 +34,15 @@ local config = function()
 end
 
 return {
-  "nvim-treesitter/nvim-treesitter",
-  build = ":TSUpdate",
-  config = config,
-  event = { "BufReadPre", "BufNewFile" },
-  dependencies = {
-    "windwp/nvim-ts-autotag",
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = config,
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      "windwp/nvim-ts-autotag",
+    },
   },
+
+  { "nvim-treesitter/nvim-treesitter-context", event = { "BufReadPre", "BufNewFile" } },
 }
