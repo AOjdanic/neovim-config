@@ -5,7 +5,8 @@ vim.opt.nu = true
 vim.opt.relativenumber = true
 
 --vim.opt.mouse = ""
-vim.opt.guicursor = vim.opt.guicursor + "a:blinkon400"
+-- vim.opt.guicursor = vim.opt.guicursor + "a:blinkon400"
+vim.opt.guicursor = "a:blinkon400"
 
 vim.opt.showmode = false
 
@@ -41,11 +42,4 @@ vim.opt.scrolloff = 10
 vim.opt.termguicolors = true
 vim.opt.isfname:append("@-@")
 
--- vim.api.nvim_set_hl(0, "Normal", {
--- 	bg = "none",
--- })
---
--- vim.api.nvim_set_hl(0, "NormalFloat", {
--- 	bg = "none",
--- })
 vim.g.netrw_banner = 0

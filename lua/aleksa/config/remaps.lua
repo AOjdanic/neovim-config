@@ -43,21 +43,12 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
 -- no idea
 vim.keymap.set("n", "Q", "<nop>")
-vim.keymap.set("n", "q", "<nop>") --will probably disable this at some point, as i will probably need to use a macro once
 
 -- creates a new tmux session
 vim.keymap.set("n", "<C-f>", ":!tmux neww ~/.local/bin/tmux-sessionizer<CR>", { noremap = true, silent = true })
 
--- for buffer formatting
--- vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
-
 -- whatever word we are on, will select it and we can replace it
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-
--- for creating an executable
--- vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", {
---   silent = true,
--- })
 
 --indenting
 vim.keymap.set("v", "<", "<gv")
@@ -76,3 +67,5 @@ vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, {
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, {
   desc = "Open diagnostic [Q]uickfix list",
 })
+
+vim.keymap.set("n", "<leader>af", "a()=>{}<Esc>F(a")

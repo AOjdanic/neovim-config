@@ -1,1 +1,1 @@
-return { "folke/neoconf.nvim", cmd = "Neoconf", event="VeryLazy" }
+return { "folke/neoconf.nvim", cmd = "Neoconf", event = "VeryLazy" }

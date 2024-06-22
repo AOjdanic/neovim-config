@@ -5,9 +5,10 @@ return {
   config = function()
     require("rose-pine").setup({
       styles = {
-        -- transparency = true
+        -- transparency = true,
       },
     })
-    vim.cmd("colorscheme rose-pine-moon")
+    -- vim.cmd("colorscheme rose-pine-moon")
+    vim.cmd("colorscheme rose-pine-main")
   end,
 }
