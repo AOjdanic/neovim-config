@@ -1,10 +1,10 @@
----@diagnostic disable: 112
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
+--vim.opt.mouse = ""
 -- vim.opt.guicursor = vim.opt.guicursor + "a:blinkon400"
 vim.opt.guicursor = "a:blinkon400"
 
@@ -43,8 +43,3 @@ vim.opt.termguicolors = true
 vim.opt.isfname:append("@-@")
 
 vim.g.netrw_banner = 0
-vim.opt.conceallevel = 2
-
-vim.diagnostic.config({
-  virtual_text = false,
-})

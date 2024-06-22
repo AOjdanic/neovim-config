@@ -1,218 +1,101 @@
 return {
-  "neovim/nvim-lspconfig",
-  event = { "BufReadPre", "BufNewFile" },
-  dependencies = {
-    "hrsh7th/cmp-nvim-lsp",
-    { "antosha417/nvim-lsp-file-operations", config = true },
-    { "folke/neodev.nvim", opts = {} },
-  },
-  config = function()
-    -- import lspconfig plugin
-    local lspconfig = require("lspconfig")
+  {
+    "neovim/nvim-lspconfig",
+    lazy = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      { "folke/neodev.nvim", opts = {} },
+    },
+    config = function()
+      local cmp_nvim_lsp = require("cmp_nvim_lsp")
+      local lspconfig = require("lspconfig")
 
-    -- import mason_lspconfig plugin
-    local mason_lspconfig = require("mason-lspconfig")
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities = vim.tbl_deep_extend("force", capabilities, cmp_nvim_lsp.default_capabilities())
 
-    -- import cmp-nvim-lsp plugin
-    local cmp_nvim_lsp = require("cmp_nvim_lsp")
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(event)
+          local opts = { noremap = true, silent = true, buffer = event.buf }
 
-    local keymap = vim.keymap -- for conciseness
+          vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, opts)
+          vim.keymap.set("n", "<leader>gd", "<cmd>Lspsaga peek_definition<CR>", opts)
+          vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, opts)
+          vim.keymap.set("n", "gI", require("telescope.builtin").lsp_implementations, opts)
+          vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+          vim.keymap.set("n", "<leader>D", require("telescope.builtin").lsp_type_definitions, opts)
+          vim.keymap.set("n", "<leader>ds", require("telescope.builtin").lsp_document_symbols, opts)
+          vim.keymap.set("n", "<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, opts)
+          vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+          vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+          vim.keymap.set("n", "K", vim.lsp.buf.hover)
 
-    vim.api.nvim_create_autocmd("LspAttach", {
-      group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-      callback = function(ev)
-        -- Buffer local mappings.
-        -- See `:help vim.lsp.*` for documentation on any of the below functions
-        local opts = { buffer = ev.buf, silent = true }
+          vim.keymap.set("n", "<leader>ld", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
+          vim.keymap.set("n", "<leader>cd", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts)
+          vim.keymap.set("n", "<leader>[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
+          vim.keymap.set("n", "<leader>]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
 
-        -- set keybinds
-        vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions) --"[G]oto [D]efinition"
-        vim.keymap.set("n", "<leader>gd", "<cmd>Lspsaga peek_definition<CR>", opts) -- peek definition
-        vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references) --"[G]oto [R]eferences"
-        vim.keymap.set("n", "gI", require("telescope.builtin").lsp_implementations) --"[G]oto [I]mplementation"
-        vim.keymap.set("n", "gD", vim.lsp.buf.declaration) --"[G]oto [D]eclaration"
-        vim.keymap.set("n", "<leader>D", require("telescope.builtin").lsp_type_definitions) --"Type [D]efinition"
-        vim.keymap.set("n", "<leader>ds", require("telescope.builtin").lsp_document_symbols) --"[D]ocument [S]ymbols"
-        vim.keymap.set("n", "<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols) --"[W]orkspace [S]ymbols"
-        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename) --"[R]e[n]ame"
-        vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action) --"[C]ode [A]ction"
-        vim.keymap.set("n", "K", vim.lsp.buf.hover) --"Hover Documentation"
+          vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 
-        vim.keymap.set("n", "<leader>ld", "<cmd>Lspsaga show_line_diagnostics<CR>", opts) -- show  diagnostics for line
-        vim.keymap.set("n", "<leader>cd", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts) -- show diagnostics for cursor
-        vim.keymap.set("n", "<leader>pd", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts) -- jump to prev diagnostic in buffer
-        vim.keymap.set("n", "<leader>nd", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts) -- jump to next diagnostic in buffer
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
 
-        opts.desc = "Restart LSP"
-        keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
-      end,
-    })
+          if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+            vim.keymap.set("n", "<leader>[h", function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+            end)
+          end
+        end,
+      })
 
-    -- used to enable autocompletion (assign to every lsp server config)
-    local capabilities = cmp_nvim_lsp.default_capabilities()
+      local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+      for type, icon in pairs(signs) do
+        local hl = "DiagnosticSign" .. type
+        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+      end
 
-    -- Change the Diagnostic symbols in the sign column (gutter)
-    -- (not in youtube nvim video)
-    local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-    for type, icon in pairs(signs) do
-      local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-    end
-
-    mason_lspconfig.setup_handlers({
-      -- default handler for installed servers
-      function(server_name)
-        lspconfig[server_name].setup({
-          capabilities = capabilities,
-        })
-      end,
-      ["eslint"] = function()
-        lspconfig["eslint"].setup({
-          capabilities = capabilities,
-          on_attach = function(_, bufnr)
-            vim.api.nvim_create_autocmd("BufWritePre", {
-              buffer = bufnr,
-              command = "EslintFixAll",
-            })
-          end,
-          filetypes = {
-            "typescript",
-            "html",
-            "typescriptreact",
-            "javascriptreact",
-            "javascript",
-            "css",
-            "sass",
-            "scss",
-            "less",
-            "svelte",
-            "vue",
-          },
-        })
-      end,
-      ["emmet_language_server"] = function()
-        -- configure emmet language server
-        lspconfig["emmet_language_server"].setup({
-          capabilities = capabilities,
-          filetypes = {
-            "html",
-            "typescriptreact",
-            "javascriptreact",
-            "css",
-            "sass",
-            "scss",
-            "less",
-            "svelte",
-            "vue",
-            "typescript",
-            "javascript",
-          },
-        })
-      end,
-      ["lua_ls"] = function()
-        -- configure lua server (with special settings)
-        lspconfig["lua_ls"].setup({
-          capabilities = capabilities,
+      local servers = {
+        lua_ls = {},
+        cssls = {},
+        rust_analyzer = {},
+        gopls = {},
+        tailwindcss = {},
+        emmet_language_server = {},
+        jsonls = {},
+        tsserver = {},
+        vuels = {},
+        volar = {},
+        bashls = {},
+        eslint = {
           settings = {
-            Lua = {
-              -- make the language server recognize "vim" global
-              diagnostics = {
-                globals = { "vim" },
-              },
-              completion = {
-                callSnippet = "Replace",
-              },
-              workspace = {
-                -- make language server aware of runtime files
-                library = {
-                  [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                  [vim.fn.stdpath("config") .. "/lua"] = true,
-                },
+            eslint = {
+              autoFixOnSave = true,
+              format = {
+                enable = true,
               },
             },
           },
-        })
-      end,
-      ["html"] = function()
-        local capabilities = vim.lsp.protocol.make_client_capabilities()
-        capabilities.textDocument.completion.completionItem.snippetSupport = true
-        lspconfig["html"].setup({
-          capabilities = capabilities,
-        })
-      end,
-      ["rust_analyzer"] = function()
-        lspconfig["rust_analyzer"].setup({
-          capabilities = capabilities,
-          filetypes = {
-            "rust",
-          },
-        })
-      end,
-      ["gopls"] = function()
-        lspconfig["gopls"].setup({
-          capabilities = capabilities,
-          filetypes = {
-            "go",
-          },
-        })
-      end,
-      ["tailwindcss"] = function()
-        lspconfig["tailwindcss"].setup({
-          capabilities = capabilities,
-          filetypes = {
-            "typescript",
-            "html",
-            "typescriptreact",
-            "javascriptreact",
-            "javascript",
-            "css",
-            "sass",
-            "scss",
-            "less",
-            "svelte",
-            "vue",
-            "jsx",
-            "tsx",
-            "typescriptreact",
-          },
-        })
-      end,
-      ["jsonls"] = function()
-        lspconfig["jsonls"].setup({
-          capabilities = capabilities,
-          filetypes = { "json", "jsonc" },
-        })
-      end,
-      ["tsserver"] = function()
-        lspconfig["tsserver"].setup({
-          capabilities = capabilities,
-          filetypes = {
-            "typescript",
-            "html",
-            "typescriptreact",
-            "javascriptreact",
-            "javascript",
-            "css",
-            "sass",
-            "scss",
-            "less",
-            "svelte",
-            "vue",
-          },
-          -- root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", ".git", "jsconfig.json"),
-        })
-      end,
-      ["bashls"] = function()
-        lspconfig["bashls"].setup({
-          capabilities = capabilities,
-          filetypes = { "sh" },
-        })
-      end,
-      ["dockerls"] = function()
-        lspconfig["dockerls"].setup({
-          capabilities = capabilities,
-        })
-      end,
-    })
-  end,
+        },
+      }
+
+      for server_name, config in pairs(servers) do
+        config.capabilities = vim.tbl_deep_extend("force", capabilities, config.capabilities or {})
+
+        lspconfig[server_name].setup(config)
+      end
+    end,
+  },
+
+  {
+    "glepnir/lspsaga.nvim",
+    config = function()
+      require("lspsaga").setup({
+        move_in_saga = { prev = "<C-k>", next = "<C-j>" },
+        finder_action_keys = {
+          open = "<CR>",
+        },
+        definition_action_keys = {
+          edit = "<CR>",
+        },
+      })
+    end,
+  },
 }

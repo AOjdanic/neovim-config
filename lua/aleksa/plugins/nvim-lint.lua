@@ -16,6 +16,7 @@ return {
       markdown = { "alex" },
       docker = { "hadolint" },
       sh = { "shellcheck" },
+      vue = { "eslint_d" },
     }
 
     local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })

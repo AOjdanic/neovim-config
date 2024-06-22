@@ -1,1 +1,1 @@
-require('aleksa.config')
+require("aleksa.config")

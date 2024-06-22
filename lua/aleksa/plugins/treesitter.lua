@@ -20,10 +20,6 @@ local config = function()
       "bash",
       "vue",
       "json",
-      "markdown_inline",
-    },
-    autotag = {
-      enable = true,
     },
     auto_install = true,
     highlight = {
@@ -33,14 +29,20 @@ local config = function()
       enable = true,
     },
   })
+
+  require("nvim-ts-autotag").setup()
 end
 
 return {
-  "nvim-treesitter/nvim-treesitter",
-  build = ":TSUpdate",
-  config = config,
-  event = { "BufReadPre", "BufNewFile" },
-  dependencies = {
-    "windwp/nvim-ts-autotag",
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = config,
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      "windwp/nvim-ts-autotag",
+    },
   },
+
+  { "nvim-treesitter/nvim-treesitter-context", event = { "BufReadPre", "BufNewFile" } },
 }

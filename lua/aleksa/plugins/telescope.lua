@@ -95,9 +95,5 @@ return {
     end, {
       desc = "[S]earch [N]eovim files",
     })
-
-    vim.keymap.set("n", "<leader>gw", "<cmd>lua require('telescope').extensions.git_worktree.git_worktrees()<CR>")
-
-    vim.keymap.set("n", "<leader>aw", "<cmd>lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>")
   end,
 }

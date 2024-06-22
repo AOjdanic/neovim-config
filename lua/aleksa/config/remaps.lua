@@ -41,22 +41,14 @@ vim.keymap.set("n", "<leader>Y", [["+Y]])
 -- this is for deleting in those registries also
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
+-- no idea
 vim.keymap.set("n", "Q", "<nop>")
--- vim.keymap.set("n", "q", "<nop>") --will probably disable this at some point, for macros
 
 -- creates a new tmux session
 vim.keymap.set("n", "<C-f>", ":!tmux neww ~/.local/bin/tmux-sessionizer<CR>", { noremap = true, silent = true })
 
 -- whatever word we are on, will select it and we can replace it
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-
--- for creating an executable
--- vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", {
---   silent = true,
--- })
-
---adittional saving remap, as I often make this mistake
-vim.keymap.set("c", "W", "w")
 
 --indenting
 vim.keymap.set("v", "<", "<gv")
@@ -77,3 +69,4 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, {
 })
 
 vim.keymap.set("n", "<leader>af", "a()=>{}<Esc>F(a")
+
