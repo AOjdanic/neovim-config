@@ -1,14 +1,15 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    lazy = { "BufReadPre", "BufNewFile" },
     dependencies = {
+      { "williamboman/mason.nvim" },
+      "williamboman/mason-lspconfig.nvim",
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
       "hrsh7th/cmp-nvim-lsp",
       { "folke/neodev.nvim", opts = {} },
     },
     config = function()
       local cmp_nvim_lsp = require("cmp_nvim_lsp")
-      local lspconfig = require("lspconfig")
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend("force", capabilities, cmp_nvim_lsp.default_capabilities())
@@ -76,11 +77,53 @@ return {
         },
       }
 
-      for server_name, config in pairs(servers) do
-        config.capabilities = vim.tbl_deep_extend("force", capabilities, config.capabilities or {})
+      local mason = require("mason")
+      mason.setup({
+        ui = {
+          icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗",
+          },
+        },
+      })
 
-        lspconfig[server_name].setup(config)
-      end
+      local ensure_installed = vim.tbl_keys(servers or {})
+
+      vim.list_extend(ensure_installed, {
+        "prettier",
+        "prettierd",
+        "stylua",
+        "isort",
+        "black",
+        "pylint",
+        "eslint_d",
+        "shfmt",
+        "luacheck",
+        "alex",
+        "hadolint",
+        "shellcheck",
+        "gofumpt",
+        "golangci-lint",
+      })
+
+      local mason_tool_installer = require("mason-tool-installer")
+      mason_tool_installer.setup({ ensure_installed = ensure_installed })
+
+      local mason_lspconfig = require("mason-lspconfig")
+      local lspconfig = require("lspconfig")
+
+      mason_lspconfig.setup({
+        automatic_installation = true,
+        handlers = {
+          function(server_name)
+            local server = servers[server_name] or {}
+
+            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+            lspconfig[server_name].setup(server)
+          end,
+        },
+      })
     end,
   },
 

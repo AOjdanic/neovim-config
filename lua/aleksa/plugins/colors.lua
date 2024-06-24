@@ -5,7 +5,7 @@ return {
     lazy = false,
     priority = 1100,
     config = function()
-      vim.cmd("colorscheme catppuccin")
+      -- vim.cmd("colorscheme catppuccin")
     end,
   },
 
@@ -26,7 +26,7 @@ return {
           -- transparency = true,
         },
       })
-      -- vim.cmd("colorscheme rose-pine-moon")
+      vim.cmd("colorscheme rose-pine-moon")
       -- vim.cmd("colorscheme rose-pine-main")
     end,
   },
