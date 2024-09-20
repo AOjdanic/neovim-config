@@ -54,27 +54,44 @@ return {
       end
 
       local servers = {
+        clangd = {},
         lua_ls = {},
         cssls = {},
         rust_analyzer = {},
         gopls = {},
         tailwindcss = {},
-        emmet_language_server = {},
+        -- emmet_language_server = {},
         jsonls = {},
         tsserver = {},
-        vuels = {},
-        volar = {},
-        bashls = {},
-        eslint = {
+        vuels = {
           settings = {
-            eslint = {
-              autoFixOnSave = true,
-              format = {
-                enable = true,
+            vetur = {
+              completion = {
+                autoImport = true,
+              },
+              languageFeatures = {
+                updateImportOnFileMove = true,
               },
             },
           },
         },
+        volar = {},
+        bashls = {},
+        -- eslint = {
+        --   settings = {
+        --     useFlatConfig = true,
+        --     experimental = {
+        --       useFlatConfig = true,
+        --     },
+        --     autoFixOnSave = true,
+        --     eslint = {
+        --       autoFixOnSave = true,
+        --       format = {
+        --         enable = true,
+        --       },
+        --     },
+        --   },
+        -- },
       }
 
       local mason = require("mason")

@@ -151,6 +151,7 @@ return {
     config = function()
       require("notify").setup({
         background_colour = "#232136",
+        timeout = 200,
       })
       vim.notify = require("notify")
     end,
@@ -192,5 +193,9 @@ return {
         desc = "Quickfix List (Trouble)",
       },
     },
+  },
+  {
+    "folke/zen-mode.nvim",
+    opts = {},
   },
 }

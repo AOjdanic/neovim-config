@@ -3,6 +3,8 @@ vim.g.maplocalleader = " "
 
 vim.opt.nu = true
 vim.opt.relativenumber = true
+-- vim.opt.statuscolumn = "%l | %r"
+-- vim.opt.stc = "%=%{v:relnum?v:relnum:v:lnum} "
 
 --vim.opt.mouse = ""
 -- vim.opt.guicursor = vim.opt.guicursor + "a:blinkon400"

@@ -42,7 +42,7 @@ return {
       { "<leader>L", "<cmd>LazyGit<cr>", desc = "LazyGit" },
     },
   },
-
+  "tpope/vim-fugitive",
   {
     "NeogitOrg/neogit",
     cmd = {
