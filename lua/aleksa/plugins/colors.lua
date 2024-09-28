@@ -15,6 +15,16 @@ return {
       require("colorizer").setup()
     end,
   },
+  {
+    "loctvl842/monokai-pro.nvim",
+    config = function()
+      require("monokai-pro").setup({
+        filter = "ristretto", -- classic | octagon | pro | machine | ristretto | spectrum
+      })
+
+      -- vim.cmd("colorscheme monokai-pro-classic")
+    end,
+  },
 
   {
     "rose-pine/neovim",
