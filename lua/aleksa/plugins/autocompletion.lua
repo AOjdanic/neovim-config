@@ -28,7 +28,12 @@ return {
           ["<C-Space>"] = cmp.mapping.complete({}),
         }),
         sources = cmp.config.sources({
-          { name = "nvim_lsp" },
+          {
+            name = "nvim_lsp",
+            entry_filter = function(entry, _)
+              return require("cmp").lsp.CompletionItemKind.Snippet ~= entry:get_kind()
+            end,
+          },
           { name = "path" },
         }, {
           { name = "buffer" },
