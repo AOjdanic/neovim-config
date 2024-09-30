@@ -7,8 +7,8 @@ vim.opt.relativenumber = true
 -- vim.opt.stc = "%=%{v:relnum?v:relnum:v:lnum} "
 
 --vim.opt.mouse = ""
--- vim.opt.guicursor = vim.opt.guicursor + "a:blinkon400"
-vim.opt.guicursor = "a:blinkon400"
+vim.opt.guicursor = vim.opt.guicursor + "a:blinkon400"
+-- vim.opt.guicursor = "a:blinkon400"
 
 vim.opt.showmode = false
 
