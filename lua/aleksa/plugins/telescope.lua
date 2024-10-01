@@ -63,8 +63,12 @@ return {
       desc = "[ ] Find existing buffers",
     })
 
-    vim.keymap.set("n", "<leader>sc", builtin.colorscheme, {
-      desc = "Search colorschemes",
+    vim.keymap.set("n", "<leader>st", builtin.git_status, {
+      desc = "Show git status of the current directory",
+    })
+
+    vim.keymap.set("n", "<leader>sc", builtin.git_commits, {
+      desc = "Search git commits",
     })
 
     vim.keymap.set("n", "<leader>si", builtin.git_files, { desc = "[S]earch [G]it [F]iles" })
