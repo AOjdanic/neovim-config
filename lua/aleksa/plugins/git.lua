@@ -31,6 +31,8 @@ return {
     -- order to load the plugin when the command is run for the first time
     keys = {
       { "<leader>L", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+      { "<leader>l", "<cmd>LazyGitFilter<cr>", desc = "LazyGit" },
+      { "<leader>lf", "<cmd>LazyGitFilterCurrentFile<cr>", desc = "LazyGit" },
     },
   },
   "tpope/vim-fugitive",
