@@ -12,6 +12,22 @@ return {
         untracked = { text = "▎" },
       },
     },
+    config = function()
+      require("gitsigns").setup({
+        on_attach = function()
+          local gs = require("gitsigns")
+
+          vim.keymap.set("n", "<leader>gb", function()
+            gs.blame_line({ full = true })
+          end)
+          vim.keymap.set("n", "<leader>gt", gs.toggle_current_line_blame)
+          vim.keymap.set("n", "<leader>gf", gs.diffthis)
+          vim.keymap.set("n", "<leader>gF", function()
+            gs.diffthis("~")
+          end)
+        end,
+      })
+    end,
   },
 
   {
