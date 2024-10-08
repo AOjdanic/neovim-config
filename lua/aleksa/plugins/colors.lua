@@ -1,4 +1,5 @@
 return {
+  "erikbackman/brightburn.vim",
   {
     "catppuccin/nvim",
 
@@ -36,8 +37,8 @@ return {
           -- transparency = true,
         },
       })
-      -- vim.cmd("colorscheme rose-pine-moon")
-      vim.cmd("colorscheme rose-pine")
+      vim.cmd("colorscheme rose-pine-moon")
+      -- vim.cmd("colorscheme rose-pine")
     end,
   },
 
